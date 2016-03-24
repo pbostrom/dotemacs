@@ -1,5 +1,18 @@
 # Compiled
 *.elc
 
+# ~
+*~
+
+# gpg
+*.gpg
+
 # Packaging
 .cask
+
+# backups / auto-save
+/auto-save-list
+/backups
+
+# tar backups
+*.tar

@@ -1,3 +1,6 @@
+;; column number mode
+(setq column-number-mode t)
+
 (require 'package)
 (add-to-list 'package-archives
     '("marmalade" .
@@ -28,6 +31,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/backups"))))
+ '(cider-cljs-lein-repl
+   "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
  '(custom-safe-themes
    (quote
     ("0b2e94037dbb1ff45cc3cd89a07901eeed93849524b574fa8daa79901b2bfdcf" default)))
@@ -72,6 +77,10 @@
 (evil-mode 1)
 (define-key evil-motion-state-map "\t" nil)
 (define-key evil-normal-state-map (kbd "M-.") nil)
+
+(define-key evil-normal-state-map "\C-d" 'evil-delete-char)
+(define-key evil-insert-state-map "\C-d" 'evil-delete-char)
+(define-key evil-visual-state-map "\C-d" 'evil-delete-char)
 
 (autoload 'paredit-mode "paredit"
   "Minor mode for pseudo-structurally editing Lisp code."
@@ -134,7 +143,7 @@
 
 (add-hook 'clojure-mode-hook 'customize-clojure-mode)
 ;;(add-hook 'clojure-mode-hook 'paredit-mode)
-(add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
+;(add-to-list 'auto-mode-alist '("\.cljs$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\.scss$" . css-mode))
 
 ;(add-hook 'nrepl-mode-hook 'paredit-mode)

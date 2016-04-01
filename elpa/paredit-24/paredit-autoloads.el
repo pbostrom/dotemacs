@@ -1,34 +1,32 @@
 ;;; paredit-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
+(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads (paredit-mode) "paredit" "paredit.el" (20856 2411
-;;;;;;  0 0))
+;;;### (autoloads nil "paredit" "paredit.el" (22270 35513 0 0))
 ;;; Generated autoloads from paredit.el
 
 (autoload 'paredit-mode "paredit" "\
 Minor mode for pseudo-structurally editing Lisp code.
 With a prefix argument, enable Paredit Mode even if there are
-  imbalanced parentheses in the buffer.
-Paredit behaves badly if parentheses are imbalanced, so exercise
+  unbalanced parentheses in the buffer.
+Paredit behaves badly if parentheses are unbalanced, so exercise
   caution when forcing Paredit Mode to be enabled, and consider
-  fixing imbalanced parentheses instead.
+  fixing unbalanced parentheses instead.
 \\<paredit-mode-map>
 
 \(fn &optional ARG)" t nil)
 
-;;;***
-
-;;;### (autoloads nil nil ("paredit-pkg.el") (20856 2411 973417 0))
+(autoload 'enable-paredit-mode "paredit" "\
+Turn on pseudo-structural editing of Lisp code.
+
+\(fn)" t nil)
 
 ;;;***
 
-(provide 'paredit-autoloads)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; paredit-autoloads.el ends here

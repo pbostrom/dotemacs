@@ -77,6 +77,7 @@
 (evil-mode 1)
 (define-key evil-motion-state-map "\t" nil)
 (define-key evil-normal-state-map (kbd "M-.") nil)
+(define-key evil-normal-state-map "q" nil)
 
 (define-key evil-normal-state-map "\C-d" 'evil-delete-char)
 (define-key evil-insert-state-map "\C-d" 'evil-delete-char)
@@ -207,3 +208,6 @@
 ;; sql indent
 (eval-after-load "sql"
   (load-library "sql-indent"))
+
+;; Magit blame mode
+(define-key global-map (kbd "C-c M-b") 'magit-blame)

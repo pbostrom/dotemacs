@@ -37,6 +37,7 @@
    (quote
     ("0b2e94037dbb1ff45cc3cd89a07901eeed93849524b574fa8daa79901b2bfdcf" default)))
  '(inhibit-startup-screen t)
+ '(json-reformat:indent-width 2)
  '(magit-status-show-hashes-in-headers t)
  '(magit-tag-arguments (quote ("--annotate" "--sign")))
  '(ns-alternate-modifier (quote meta))
@@ -120,6 +121,9 @@
 				      "\\>")
 			     1 font-lock-keyword-face)))
 
+  (dolist (c (string-to-list ":_-?!#*"))
+      (modify-syntax-entry c "w" clojure-mode-syntax-table))
+
   ;; Function name support for defn$
   (font-lock-add-keywords 'clojure-mode
 			  `((,(concat "(\\(?:[a-z\.-]+/\\)?\\(defn\\$\\)"
@@ -161,6 +165,11 @@
     (setq indent-tabs-mode nil)
     (setq js-indent-level 2)))
 
+(add-hook 'json-mode-hook
+  (lambda ()
+    (setq indent-tabs-mode nil)
+    (setq js-indent-level 2)))
+
 (add-hook 'css-mode-hook
   (lambda ()
     (setq css-indent-offset 2)))
@@ -168,6 +177,10 @@
 (add-hook 'html-mode-hook
   (lambda ()
     (setq indent-tabs-mode nil)))
+
+(defun json4-indent ()
+  (interactive)
+  (setq js-indent-level 4))
 
 (define-key evil-insert-state-map "j" #'cofi/maybe-exit)
 

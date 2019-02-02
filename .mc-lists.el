@@ -4,8 +4,10 @@
 (setq mc/cmds-to-run-for-all
       '(
 	evil-backward-char
+	evil-delete
 	evil-forward-char
 	evil-insert
+	evil-visual-char
 	smex
 	))
 
@@ -14,5 +16,6 @@
 	evil-delete-char
 	evil-next-line
 	evil-previous-line
+	evil-scroll-line-down
 	evil-search-next
 	))

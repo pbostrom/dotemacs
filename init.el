@@ -11,9 +11,10 @@
   (interactive)
   (package-initialize)
   (add-to-list 'package-archives
-	       '("melpa-stable" . "http://stable.melpa.org/packages/") t))
+	       '("melpa-stable" . "https://stable.melpa.org/packages/") t))
 
 (defun load-melpa ()
+  (interactive)
   (package-initialize)
   (add-to-list 'package-archives
 	       '("melpa" .
@@ -32,23 +33,27 @@
  ;; If there is more than one, they won't work right.
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/backups"))))
  '(cider-cljs-lein-repl
-   "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
+   "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))" t)
  '(custom-safe-themes
    (quote
     ("0b2e94037dbb1ff45cc3cd89a07901eeed93849524b574fa8daa79901b2bfdcf" default)))
  '(inhibit-startup-screen t)
  '(json-reformat:indent-width 2)
+ '(magit-pull-arguments nil)
  '(magit-status-show-hashes-in-headers t)
  '(magit-tag-arguments (quote ("--annotate" "--sign")))
  '(ns-alternate-modifier (quote meta))
  '(ns-command-modifier (quote control))
+ '(package-selected-packages
+   (quote
+    (go-mode nodejs-repl terraform-mode markdown-mode alchemist yaml-mode dockerfile-mode buffer-move inf-clojure dimmer sql-indent smex paredit multiple-cursors magit json-mode ido-vertical-mode haskell-mode groovy-mode evil cider)))
  '(sql-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(font-lock-keyword-face ((t (:foreground "#de344c")))))
 
 ;; ido mode
 (require 'ido-vertical-mode)
@@ -112,7 +117,7 @@
   (setq cider-prompt-for-symbol nil)
 
   (defvar clojure-keyword-vars
-    '("defn$" "defn'" "fna" "fnv" "fn'" "fn$"))
+    '("defn$" "defn'" "fna" "fnv" "fn'" "fn$" "fn-traced"))
 
   ;; Font lock annotate keywords vars
   (font-lock-add-keywords 'clojure-mode
@@ -144,7 +149,8 @@
     (fn' 1)
     (valid 1)
     (invalid 1)
-    (typecheck 1)))
+    (typecheck 1)
+    (fn-traced 1)))
 
 (add-hook 'clojure-mode-hook 'customize-clojure-mode)
 ;;(add-hook 'clojure-mode-hook 'paredit-mode)
@@ -154,11 +160,20 @@
 ;(add-hook 'nrepl-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 
+(add-hook 'elixir-mode-hook
+  (lambda ()
+    (require 'elixir-format)
+    (setq indent-tabs-mode nil)))
+
 (add-hook 'python-mode-hook
   (lambda ()
     (setq indent-tabs-mode nil)
-    (setq tab-width 2)
-    (setq python-indent 2)))
+    (setq tab-width 4)
+    (setq python-indent 4)))
+
+(add-hook 'go-mode-hook
+  (lambda ()
+    (setq tab-width 2)))
 
 (add-hook 'js-mode-hook
   (lambda ()
@@ -178,9 +193,24 @@
   (lambda ()
     (setq indent-tabs-mode nil)))
 
+(add-hook 'groovy-mode-hook
+  (lambda ()
+    (setq indent-tabs-mode nil)))
+
+(add-hook 'sh-mode-hook
+  (lambda ()
+    (setq indent-tabs-mode nil)
+    (setq sh-basic-offset 2)
+    (setq sh-indentation 2)))
+
 (defun json4-indent ()
   (interactive)
   (setq js-indent-level 4))
+
+(defun bash2-indent ()
+  (interactive)
+  (setq sh-basic-offset 2)
+  (setq sh-indentation 2))
 
 (define-key evil-insert-state-map "j" #'cofi/maybe-exit)
 
@@ -224,3 +254,45 @@
 
 ;; Magit blame mode
 (define-key global-map (kbd "C-c M-b") 'magit-blame)
+
+;; Cider w/ figwheel
+(defun cider-figwheel-repl ()
+  (interactive)
+  (save-some-buffers)
+  (with-current-buffer (cider-current-repl-buffer)
+    (goto-char (point-max))
+    (insert "(require 'figwheel-sidecar.repl-api)
+	     (figwheel-sidecar.repl-api/start-figwheel!) ; idempotent
+	     (figwheel-sidecar.repl-api/cljs-repl)")
+    (cider-repl-return)))
+
+(setq cider-cljs-lein-repl
+      "(do (require 'figwheel-sidecar.repl-api)
+           (figwheel-sidecar.repl-api/start-figwheel!)
+           (figwheel-sidecar.repl-api/cljs-repl))")
+
+(defun figwheel-repl ()
+  (interactive)
+  (inf-clojure-minor-mode)
+  (inf-clojure "lein figwheel"))
+
+(require 'dimmer)
+(dimmer-activate)
+
+(require 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(put 'upcase-region 'disabled nil)
+
+;; nodejs repl
+(require 'nodejs-repl)
+
+(add-hook 'js-mode-hook
+          (lambda ()
+            (define-key js-mode-map (kbd "C-x C-e") 'nodejs-repl-send-last-expression)
+            (define-key js-mode-map (kbd "C-c C-j") 'nodejs-repl-send-line)
+            (define-key js-mode-map (kbd "C-c C-r") 'nodejs-repl-send-region)
+            (define-key js-mode-map (kbd "C-c C-k") 'nodejs-repl-load-file)
+            (define-key js-mode-map (kbd "C-c C-z") 'nodejs-repl-switch-to-repl)))

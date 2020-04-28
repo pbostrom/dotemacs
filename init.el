@@ -1,3 +1,4 @@
+(desktop-save-mode 1)
 ;; column number mode
 (setq column-number-mode t)
 
@@ -37,6 +38,9 @@
  '(custom-safe-themes
    (quote
     ("0b2e94037dbb1ff45cc3cd89a07901eeed93849524b574fa8daa79901b2bfdcf" default)))
+ '(grep-find-ignored-directories
+   (quote
+    ("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "node_modules")))
  '(inhibit-startup-screen t)
  '(json-reformat:indent-width 2)
  '(magit-pull-arguments nil)
@@ -46,7 +50,7 @@
  '(ns-command-modifier (quote control))
  '(package-selected-packages
    (quote
-    (go-mode nodejs-repl terraform-mode markdown-mode alchemist yaml-mode dockerfile-mode buffer-move inf-clojure dimmer sql-indent smex paredit multiple-cursors magit json-mode ido-vertical-mode haskell-mode groovy-mode evil cider)))
+    (rust-mode toml-mode go-mode nodejs-repl terraform-mode markdown-mode alchemist yaml-mode dockerfile-mode buffer-move inf-clojure dimmer sql-indent smex paredit multiple-cursors magit json-mode ido-vertical-mode haskell-mode groovy-mode evil cider)))
  '(sql-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -117,7 +121,7 @@
   (setq cider-prompt-for-symbol nil)
 
   (defvar clojure-keyword-vars
-    '("defn$" "defn'" "fna" "fnv" "fn'" "fn$" "fn-traced"))
+    '("defn$" "defn'" "fna" "fnv" "fn'" "fn$" "fn-traced" "pdoseq"))
 
   ;; Font lock annotate keywords vars
   (font-lock-add-keywords 'clojure-mode
@@ -150,7 +154,8 @@
     (valid 1)
     (invalid 1)
     (typecheck 1)
-    (fn-traced 1)))
+    (fn-traced 1)
+    (pdoseq 1)))
 
 (add-hook 'clojure-mode-hook 'customize-clojure-mode)
 ;;(add-hook 'clojure-mode-hook 'paredit-mode)
@@ -296,3 +301,8 @@
             (define-key js-mode-map (kbd "C-c C-r") 'nodejs-repl-send-region)
             (define-key js-mode-map (kbd "C-c C-k") 'nodejs-repl-load-file)
             (define-key js-mode-map (kbd "C-c C-z") 'nodejs-repl-switch-to-repl)))
+
+;; toml
+(require 'toml-mode)
+
+(setq require-final-newline t)

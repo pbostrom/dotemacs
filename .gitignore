@@ -16,3 +16,5 @@
 
 # tar backups
 *.tar
+
+network-security.data

@@ -3,10 +3,13 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+	evil-append
 	evil-backward-char
 	evil-delete
+	evil-end-of-line
 	evil-forward-char
 	evil-insert
+	evil-normal-state
 	evil-visual-char
 	smex
 	))
